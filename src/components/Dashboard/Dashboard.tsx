@@ -3,6 +3,8 @@ import {
   Card,
   StatusIndicator,
   DropdownButton,
+  AppHeader,
+  IconButton,
   type Status,
   type DropdownItem,
 } from "ui-kit";
@@ -14,6 +16,9 @@ import unknownIcon from "../../assets/circle-check.svg";
 import powerIcon from "../../assets/power_icon.svg";
 import ledIcon from "../../assets/sun.svg";
 import chevronIcon from "../../assets/chevron-down.svg";
+import searchIcon from "../../assets/search.svg";
+import userIcon from "../../assets/user.svg";
+import helpIcon from "../../assets/help-icon.svg";
 
 export function Dashboard() {
   const jobs = [
@@ -91,6 +96,28 @@ export function Dashboard() {
   ];
   return (
     <div>
+      <AppHeader
+        productName="BMC UI Version 10 | License Type"
+        actions={
+          <>
+            <IconButton
+              icon={<img src={searchIcon} alt="" />}
+              ariaLabel="Search"
+              onClick={() => console.log("Search clicked")}
+            />
+            <IconButton
+              icon={<img src={userIcon} alt="" />}
+              ariaLabel="Lock"
+              onClick={() => console.log("Lock clicked")}
+            />
+            <IconButton
+              icon={<img src={helpIcon} alt="" />}
+              ariaLabel="Help"
+              onClick={() => console.log("Help clicked")}
+            />
+          </>
+        }
+      />
       <div className="btn-container">
         <DropdownButton
           label="Power Control"
