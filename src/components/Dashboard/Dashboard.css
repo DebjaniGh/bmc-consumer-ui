@@ -1,0 +1,40 @@
+.btn-container {
+  margin: 14px 14px;
+  display: flex;
+  gap: 20px;
+}
+
+.cards-container {
+  margin: 14px 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 12px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.table-grid {
+  display: grid;
+  /* First column (labels) is fixed at 220px, second column (values) fills remaining space */
+  grid-template-columns: 220px 1fr;
+  row-gap: 12px; /* Controls spacing between rows */
+  column-gap: 24px; /* Space between the label and its value */
+  font-family: sans-serif;
+  color: #333;
+}
+
+.label {
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.value {
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
