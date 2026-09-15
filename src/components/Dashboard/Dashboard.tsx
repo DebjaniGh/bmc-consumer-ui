@@ -5,7 +5,7 @@ import {
   DropdownButton,
   type Status,
   type DropdownItem,
-} from "ui-kit";
+} from "@debjani6ghosh/bmc-ui-kit";
 import { Fragment } from "react";
 import healthyIcon from "../../assets/circle-check.svg";
 import criticalIcon from "../../assets/octagon-x.svg";

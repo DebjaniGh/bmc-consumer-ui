@@ -1,4 +1,8 @@
-import { AppLayout, IconButton, type SidebarMenuItem } from "ui-kit";
+import {
+  AppLayout,
+  IconButton,
+  type SidebarMenuItem,
+} from "@debjani6ghosh/bmc-ui-kit";
 import searchIcon from "../../assets/search.svg";
 import userIcon from "../../assets/user.svg";
 import helpIcon from "../../assets/help-icon.svg";

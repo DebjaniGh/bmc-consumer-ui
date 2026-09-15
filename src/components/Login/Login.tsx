@@ -5,7 +5,7 @@ import {
   type Credentials,
   type RSACredentials,
   type SCCredentials,
-} from "ui-kit";
+} from "@debjani6ghosh/bmc-ui-kit";
 import productIcon from "../../assets/new_logo.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
