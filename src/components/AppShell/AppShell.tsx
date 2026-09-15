@@ -13,6 +13,11 @@ import { Outlet } from "react-router-dom";
 
 const sidebarMenu: SidebarMenuItem[] = [
   {
+    label: "Dashboard",
+    icon: <img src={searchIcon} alt="sidebar menu icon" />,
+    path: "/dashboard",
+  },
+  {
     label: "Example Component 1",
     icon: <img src={searchIcon} alt="sidebar menu icon" />,
     path: "/Example1",
