@@ -3,8 +3,6 @@ import {
   Card,
   StatusIndicator,
   DropdownButton,
-  AppHeader,
-  IconButton,
   type Status,
   type DropdownItem,
 } from "ui-kit";
@@ -16,108 +14,84 @@ import unknownIcon from "../../assets/circle-check.svg";
 import powerIcon from "../../assets/power_icon.svg";
 import ledIcon from "../../assets/sun.svg";
 import chevronIcon from "../../assets/chevron-down.svg";
-import searchIcon from "../../assets/search.svg";
-import userIcon from "../../assets/user.svg";
-import helpIcon from "../../assets/help-icon.svg";
+
+const jobs = [
+  { type: "Pending", count: 0 },
+  { type: "In Progress", count: 5 },
+  { type: "Finished", count: 15 },
+];
+
+const statusData: { title: string; status: Status }[] = [
+  { title: "GPU", status: "critical" },
+  { title: "Server Health", status: "warning" },
+  { title: "System Health", status: "healthy" },
+  { title: "Cooling", status: "healthy" },
+  { title: "Processor", status: "healthy" },
+  { title: "Memory", status: "healthy" },
+  { title: "Intrusion", status: "healthy" },
+  { title: "Voltages", status: "healthy" },
+  { title: "Power Supplies", status: "critical" },
+  { title: "Storage Health", status: "warning" },
+];
+
+const statusIcons: Record<Status, string> = {
+  healthy: healthyIcon,
+  critical: criticalIcon,
+  warning: warningIcon,
+  unknown: unknownIcon,
+};
+
+const statusDataWithIcons = statusData.map((item) => ({
+  ...item,
+  icon: statusIcons[item.status],
+}));
+
+const systemData: Record<string, string>[] = [
+  { label: "Power State", value: "On" },
+  { label: "Model", value: "PowerEdge R470" },
+  { label: "Host Name", value: "WIN-K5710073NN9" },
+  {
+    label: "Operating System",
+    value: "Microsoft Windows Server 2022 Standard",
+  },
+  { label: "Operating System Version", value: "xyz.18.9.23" },
+  { label: "Service Tag", value: "xyz56rty" },
+  { label: "IP Address", value: "10.10.101.0" },
+];
+
+const powerCtrlBtnOptions: DropdownItem[] = [
+  {
+    label: "Power On",
+    onClick: () => {
+      console.log("Powered On");
+    },
+  },
+  { label: "Power Off", onClick: () => console.log("Power Off") },
+  { label: "Power Cycle", onClick: () => console.log("Power Cycle") },
+  {
+    label: "Graceful Shutdown",
+    onClick: () => console.log("Graceful Shutdown"),
+  },
+];
+
+const ledOptions: DropdownItem[] = [
+  {
+    label: "LED On",
+    onClick: () => {
+      console.log("Switched on LED.");
+    },
+  },
+  {
+    label: "LED Off",
+    onClick: () => {
+      console.log("Switched off LED.");
+    },
+  },
+];
 
 export function Dashboard() {
-  const jobs = [
-    { type: "Pending", count: 0 },
-    { type: "In Progress", count: 5 },
-    { type: "Finished", count: 15 },
-  ];
-
-  const statusData: { title: string; status: Status }[] = [
-    { title: "GPU", status: "critical" },
-    { title: "Server Health", status: "warning" },
-    { title: "System Health", status: "healthy" },
-    { title: "Cooling", status: "healthy" },
-    { title: "Processor", status: "healthy" },
-    { title: "Memory", status: "healthy" },
-    { title: "Intrusion", status: "healthy" },
-    { title: "Voltages", status: "healthy" },
-    { title: "Power Supplies", status: "critical" },
-    { title: "Storage Health", status: "warning" },
-  ];
-
-  const statusIcons: Record<Status, string> = {
-    healthy: healthyIcon,
-    critical: criticalIcon,
-    warning: warningIcon,
-    unknown: unknownIcon,
-  };
-
-  const statusDataWithIcons = statusData.map((item) => ({
-    ...item,
-    icon: statusIcons[item.status],
-  }));
-
-  const systemData: Record<string, string>[] = [
-    { label: "Power State", value: "On" },
-    { label: "Model", value: "PowerEdge R470" },
-    { label: "Host Name", value: "WIN-K5710073NN9" },
-    {
-      label: "Operating System",
-      value: "Microsoft Windows Server 2022 Standard",
-    },
-    { label: "Operating System Version", value: "xyz.18.9.23" },
-    { label: "Service Tag", value: "xyz56rty" },
-    { label: "IP Address", value: "10.10.101.0" },
-  ];
-
-  const powerCtrlBtnOptions: DropdownItem[] = [
-    {
-      label: "Power On",
-      onClick: () => {
-        console.log("Powered On");
-      },
-    },
-    { label: "Power Off", onClick: () => console.log("Power Off") },
-    { label: "Power Cycle", onClick: () => console.log("Power Cycle") },
-    {
-      label: "Graceful Shutdown",
-      onClick: () => console.log("Graceful Shutdown"),
-    },
-  ];
-
-  const ledOptions: DropdownItem[] = [
-    {
-      label: "LED On",
-      onClick: () => {
-        console.log("Switched on LED.");
-      },
-    },
-    {
-      label: "LED Off",
-      onClick: () => {
-        console.log("Switched off LED.");
-      },
-    },
-  ];
   return (
     <div>
-      <AppHeader
-        productName="BMC UI Version 10 | License Type"
-        actions={
-          <>
-            <IconButton
-              icon={<img src={searchIcon} alt="" />}
-              ariaLabel="Search"
-              onClick={() => console.log("Search clicked")}
-            />
-            <IconButton
-              icon={<img src={userIcon} alt="" />}
-              ariaLabel="Lock"
-              onClick={() => console.log("Lock clicked")}
-            />
-            <IconButton
-              icon={<img src={helpIcon} alt="" />}
-              ariaLabel="Help"
-              onClick={() => console.log("Help clicked")}
-            />
-          </>
-        }
-      />
       <div className="btn-container">
         <DropdownButton
           label="Power Control"
