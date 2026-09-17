@@ -48,7 +48,7 @@ export function AppShell() {
   return (
     <AppLayout
       header={{
-        productName: "BMC UI Version 10 | License Type",
+        productName: "BMC UI 10.0 | License Type",
         actions: (
           <>
             <IconButton
