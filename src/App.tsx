@@ -1,4 +1,4 @@
-import { BrowserRouter, useRoutes } from "react-router-dom";
+import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { Login } from "./components/Login/Login";
 import { Example1 } from "./components/Example1/Example1";
@@ -6,6 +6,9 @@ import { Example2 } from "./components/Example2/Example2";
 import { Example3 } from "./components/Example3/Example3";
 import { Example4 } from "./components/Example4/Example4";
 import { AppShell } from "./components/AppShell/AppShell";
+import { Controller } from "./components/Example3/components/Controller/Controller";
+import { PhysicalDisks } from "./components/Example3/components/Controller/PhysicalDisks";
+import { Enclosures } from "./components/Example3/components/Controller/Enclosures";
 
 const routeConfig = [
   {
@@ -32,6 +35,12 @@ const routeConfig = [
       {
         path: "/Example3",
         element: <Example3 />,
+        children: [
+          { index: true, element: <Navigate to="controller" replace /> },
+          { path: "controller", element: <Controller /> },
+          { path: "physical-disks", element: <PhysicalDisks /> },
+          { path: "enclosures", element: <Enclosures /> },
+        ],
       },
       {
         path: "/Example4",
