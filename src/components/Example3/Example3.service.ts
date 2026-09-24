@@ -35,3 +35,26 @@ export async function fetchEnclosures(): Promise<Enclosure[]> {
   }
   return res.json();
 }
+
+export interface PhysicalDisk {
+  id: string;
+  controllerId: string;
+  enclosureId: string | null;
+  slotNumber: number;
+  serialNumber: string;
+  model: string;
+  manufacturer: string;
+  mediaType: string;
+  capacity: string;
+  interfaceType: string;
+  status: string;
+  firmwareVersion: string;
+}
+
+export async function fetchPhysicalDisks(): Promise<PhysicalDisk[]> {
+  const res = await fetch("/api/physical-disks");
+  if (!res.ok) {
+    throw new Error(`Request failed, ${res.status}`);
+  }
+  return res.json();
+}
