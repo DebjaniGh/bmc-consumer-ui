@@ -33,10 +33,18 @@ Then open the printed local URL. The app starts on the login screen; sign in wit
 Other scripts:
 
 ```bash
-npm run build     # type-check and build for production
-npm run preview   # preview the production build locally
-npm run lint       # run ESLint
+npm run build       # type-check and build for production
+npm run preview     # preview the production build locally
+npm run lint        # run ESLint
+npm run test        # run the test suite once
+npm run test:watch  # run the test suite in watch mode
 ```
+
+## Testing
+
+Component tests use **Vitest** + **React Testing Library**, testing components the way a user interacts with them rather than their internals. Coverage today includes the `Login` flow — valid credentials navigating to the dashboard, invalid credentials staying put, and the RSA domain switching to the passcode screen — plus a smoke test for `Example4`.
+
+One gotcha worth knowing if you add more: `ui-kit` is linked via npm's `file:` protocol and carries its own `node_modules`, so without `resolve.dedupe: ["react", "react-dom"]` in `vite.config.ts`, the app and the linked library resolve to two separate React copies and any hook called inside a `ui-kit` component throws "Invalid hook call."
 
 ## Project structure
 
