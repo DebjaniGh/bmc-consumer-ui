@@ -77,6 +77,9 @@ export function Example2() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["system-info"],
     queryFn: fetchSystemInfo,
+    // Overrides the app-wide default (5 min): this can change via PATCH from
+    // elsewhere, so always refetch on mount rather than trusting the cache.
+    staleTime: 0,
   });
 
   const [formData, setFormData] = useState<SystemInfo | null>(null);
