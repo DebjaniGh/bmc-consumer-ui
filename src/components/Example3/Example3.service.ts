@@ -41,8 +41,10 @@ export interface PhysicalDiskFilter {
   mediaType?: string;
 }
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export async function fetchControllers(): Promise<Controller[]> {
-  const res = await fetch("/api/controllers");
+  const res = await fetch(`${API_BASE}/api/controllers`);
   if (!res.ok) {
     throw new Error(`Request failed, ${res.status}`);
   }
@@ -50,7 +52,7 @@ export async function fetchControllers(): Promise<Controller[]> {
 }
 
 export async function fetchEnclosures(): Promise<Enclosure[]> {
-  const res = await fetch("/api/enclosures");
+  const res = await fetch(`${API_BASE}/api/enclosures`);
   if (!res.ok) {
     throw new Error(`Request failed, ${res.status}`);
   }
@@ -67,7 +69,9 @@ export async function fetchPhysicalDisks(
   if (filter.mediaType) params.set("mediaType", filter.mediaType);
 
   const query = params.toString();
-  const res = await fetch(`/api/physical-disks${query ? `?${query}` : ""}`);
+  const res = await fetch(
+    `${API_BASE}/api/physical-disks${query ? `?${query}` : ""}`,
+  );
   if (!res.ok) {
     throw new Error(`Request failed, ${res.status}`);
   }

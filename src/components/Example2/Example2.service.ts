@@ -16,8 +16,10 @@ export interface SystemInfo {
 export type EditableKey = "hostName" | "assetTag" | "location" | "adminContact";
 export type SystemInfoPatch = Partial<Pick<SystemInfo, EditableKey>>;
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export async function fetchSystemInfo(): Promise<SystemInfo> {
-  const res = await fetch("/api/system-info");
+  const res = await fetch(`${API_BASE}/api/system-info`);
   if (!res.ok) {
     throw new Error(`Request failed, ${res.status}`);
   }
@@ -27,7 +29,7 @@ export async function fetchSystemInfo(): Promise<SystemInfo> {
 export async function patchSystemInfo(
   patch: SystemInfoPatch,
 ): Promise<SystemInfo> {
-  const res = await fetch("/api/system-info", {
+  const res = await fetch(`${API_BASE}/api/system-info`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
