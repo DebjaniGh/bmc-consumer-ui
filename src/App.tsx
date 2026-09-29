@@ -1,16 +1,10 @@
 import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
-//import { Dashboard } from "./components/Dashboard/Dashboard";
 import { Login } from "./components/Login/Login";
-//import { Example1 } from "./components/Example1/Example1";
-// import { Example2 } from "./components/Example2/Example2";
-// import { Example3 } from "./components/Example3/Example3";
-// import { Example4 } from "./components/Example4/Example4";
 import { AppShell } from "./components/AppShell/AppShell";
-// import { Controller } from "./components/Example3/components/Controller/Controller";
-// import { PhysicalDisks } from "./components/Example3/components/Controller/PhysicalDisks";
-// import { Enclosures } from "./components/Example3/components/Controller/Enclosures";
 import { lazy, Suspense } from "react";
 
+/* lazy() only accepts a promise that resolves to a default export, so named exports have to
+ be manually reshaped into that form. */
 const Dashboard = lazy(() =>
   import("./components/Dashboard/Dashboard").then((m) => ({
     default: m.Dashboard,
