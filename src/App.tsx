@@ -1,7 +1,7 @@
-import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { Login } from "./components/Login/Login";
 import { AppShell } from "./components/AppShell/AppShell";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 
 /* lazy() only accepts a promise that resolves to a default export, so named exports have to
  be manually reshaped into that form. */
@@ -50,6 +50,13 @@ const Enclosures = lazy(() =>
   ),
 );
 
+// Each lazy route element needs its own Suspense boundary: with a data
+// router, RouterProvider renders the matched tree directly (it takes no
+// children to wrap in a single top-level Suspense the way useRoutes did).
+function withSuspense(element: ReactNode) {
+  return <Suspense fallback={<div>Loading...</div>}>{element}</Suspense>;
+}
+
 const routeConfig = [
   {
     path: "/",
@@ -62,46 +69,41 @@ const routeConfig = [
     children: [
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: withSuspense(<Dashboard />),
       },
       {
         path: "/Example1",
-        element: <Example1 />,
+        element: withSuspense(<Example1 />),
       },
       {
         path: "/Example2",
-        element: <Example2 />,
+        element: withSuspense(<Example2 />),
       },
       {
         path: "/Example3",
-        element: <Example3 />,
+        element: withSuspense(<Example3 />),
         children: [
           { index: true, element: <Navigate to="controller" replace /> },
-          { path: "controller", element: <Controller /> },
-          { path: "physical-disks", element: <PhysicalDisks /> },
-          { path: "enclosures", element: <Enclosures /> },
+          { path: "controller", element: withSuspense(<Controller />) },
+          { path: "physical-disks", element: withSuspense(<PhysicalDisks />) },
+          { path: "enclosures", element: withSuspense(<Enclosures />) },
         ],
       },
       {
         path: "/Example4",
-        element: <Example4 />,
+        element: withSuspense(<Example4 />),
       },
     ],
   },
 ];
 
-function AppRoutes() {
-  return useRoutes(routeConfig);
-}
+// createBrowserRouter (a "data router") is required rather than
+// <BrowserRouter> + useRoutes: only data routers support useBlocker, which
+// the unsaved-changes guard on Example2 depends on to intercept navigation.
+const router = createBrowserRouter(routeConfig);
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <AppRoutes />
-      </Suspense>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import { Form, TextField, InfoField, Button } from "@debjani6ghosh/bmc-ui-kit";
+import { Form, TextField, InfoField, Button, Modal } from "@debjani6ghosh/bmc-ui-kit";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -8,6 +8,7 @@ import {
   type EditableKey,
   type SystemInfoPatch,
 } from "./Example2.service";
+import { useUnsavedChangesGuard } from "../../hooks/useUnsavedChangesGuard";
 import "./Example2.css";
 
 // Config-driven form: each row's label, source field, and editable/read-only
@@ -132,46 +133,89 @@ export function Example2() {
       ? Object.keys(diffEditableFields(data, formData)).length > 0
       : false;
 
+  // Intercepts in-app navigation while isDirty is true; blocker.state
+  // becomes "blocked" mid-navigation, which we render the confirmation
+  // modal for below. See useUnsavedChangesGuard for why this requires the
+  // app's router to be in data-router mode (createBrowserRouter).
+  const blocker = useUnsavedChangesGuard(isDirty);
+
+  // Modal's "Apply": save the pending edits, then let the navigation that
+  // triggered the block continue. mutateAsync (not mutate) so we can await
+  // the PATCH before calling proceed() -- otherwise we'd navigate away
+  // before the save actually finished.
+  const handleApplyAndLeave = async () => {
+    if (!data || !formData) return;
+    const patch = diffEditableFields(data, formData);
+    if (Object.keys(patch).length > 0) {
+      await patchMutation.mutateAsync(patch);
+    }
+    blocker.proceed?.();
+  };
+
+  // Modal's "Cancel": call it off. This cancels the *navigation attempt*,
+  // not the edits -- the user stays on the page with formData untouched.
+  const handleStay = () => {
+    blocker.reset?.();
+  };
+
   if (isLoading) return <div>Loading ...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!formData) return null;
 
   return (
-    <Form onSubmit={() => {}}>
-      {fieldConfig.map((field) =>
-        field.editable ? (
-          <TextField
-            key={field.key}
-            label={field.label}
-            value={formData[field.key]}
-            onChange={(e) =>
-              handleFieldChange(field.key as EditableKey, e.target.value)
-            }
+    <>
+      <Form onSubmit={() => {}}>
+        {fieldConfig.map((field) =>
+          field.editable ? (
+            <TextField
+              key={field.key}
+              label={field.label}
+              value={formData[field.key]}
+              onChange={(e) =>
+                handleFieldChange(field.key as EditableKey, e.target.value)
+              }
+            />
+          ) : (
+            <InfoField
+              key={field.key}
+              label={field.label}
+              value={formData[field.key]}
+            />
+          ),
+        )}
+        <div className="buttons">
+          <Button
+            type="button"
+            label="Cancel"
+            variant="secondary"
+            onClick={handleCancel}
+            disabled={!isDirty || patchMutation.isPending}
           />
-        ) : (
-          <InfoField
-            key={field.key}
-            label={field.label}
-            value={formData[field.key]}
+          <Button
+            type="button"
+            label="Apply"
+            variant="primary"
+            onClick={handleApply}
+            disabled={!isDirty || patchMutation.isPending}
           />
-        ),
-      )}
-      <div className="buttons">
-        <Button
-          type="button"
-          label="Cancel"
-          variant="secondary"
-          onClick={handleCancel}
-          disabled={!isDirty || patchMutation.isPending}
-        />
-        <Button
-          type="button"
-          label="Apply"
-          variant="primary"
-          onClick={handleApply}
-          disabled={!isDirty || patchMutation.isPending}
-        />
-      </div>
-    </Form>
+        </div>
+      </Form>
+
+      <Modal isOpen={blocker.state === "blocked"} title="Unsaved changes">
+        <p>
+          You have unsaved changes on this page. Apply them before leaving,
+          or stay to keep editing.
+        </p>
+        <div className="buttons">
+          <Button label="Cancel" variant="secondary" onClick={handleStay} />
+          <Button
+            label="Apply"
+            variant="primary"
+            onClick={handleApplyAndLeave}
+            disabled={patchMutation.isPending}
+          />
+        </div>
+      </Modal>
+    </>
   );
 }
