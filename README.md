@@ -1,5 +1,6 @@
 # consumer-ui
 
+Link - https://bmc-consumer-ui-production.up.railway.app/
 A demo application that consumes **[`@debjani6ghosh/bmc-ui-kit`](https://www.npmjs.com/package/@debjani6ghosh/bmc-ui-kit)**, a published, standalone React component library, to rebuild the login and dashboard experience of BMC admin console.
 
 This project exists to prove the library works the way a real consuming app would use it — installed as a package, not copy-pasted as source — and to exercise every tier of the kit (primitives, patterns, and full-page templates) against realistic, data-driven screens.
