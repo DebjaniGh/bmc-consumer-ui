@@ -147,7 +147,14 @@ export function Example2() {
     if (!data || !formData) return;
     const patch = diffEditableFields(data, formData);
     if (Object.keys(patch).length > 0) {
-      await patchMutation.mutateAsync(patch);
+      try {
+        await patchMutation.mutateAsync(patch);
+      } catch {
+        // Stay blocked, modal stays open, edits stay intact. The failure
+        // itself is surfaced via patchMutation.isError in the render below,
+        // not here -- mutateAsync already recorded it on the mutation.
+        return;
+      }
     }
     blocker.proceed?.();
   };
@@ -183,6 +190,9 @@ export function Example2() {
             />
           ),
         )}
+        {patchMutation.isError && (
+          <p className="error">Failed to save changes. Please try again.</p>
+        )}
         <div className="buttons">
           <Button
             type="button"
@@ -206,6 +216,9 @@ export function Example2() {
           You have unsaved changes on this page. Apply them before leaving,
           or stay to keep editing.
         </p>
+        {patchMutation.isError && (
+          <p className="error">Failed to save changes. Please try again.</p>
+        )}
         <div className="buttons">
           <Button label="Cancel" variant="secondary" onClick={handleStay} />
           <Button

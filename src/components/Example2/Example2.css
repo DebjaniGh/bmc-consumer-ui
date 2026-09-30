@@ -4,3 +4,8 @@
   align-items: center;
   gap: 10px;
 }
+
+.error {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
